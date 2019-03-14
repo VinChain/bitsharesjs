@@ -531,6 +531,10 @@ export var price = new Serializer("price", {
     quote: asset
 });
 
+export var extended_asset_options = new Serializer("extensions_type", {
+    payment_core_exchange_rate: price
+});
+
 export var asset_options = new Serializer("asset_options", {
     max_supply: int64,
     market_fee_percent: uint16,
@@ -543,7 +547,7 @@ export var asset_options = new Serializer("asset_options", {
     whitelist_markets: set(protocol_id_type("asset")),
     blacklist_markets: set(protocol_id_type("asset")),
     description: string,
-    extensions: set(future_extensions)
+    extensions: extended_asset_options
 });
 
 export var bitasset_options = new Serializer("bitasset_options", {
