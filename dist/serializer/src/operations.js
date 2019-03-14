@@ -582,7 +582,9 @@ var price = (exports.price = new Serializer("price", {
 
 var extended_asset_options = (exports.extended_asset_options = new Serializer(
     "extensions_type",
-    {payment_core_exchange_rate: price}
+    {
+        payment_core_exchange_rate: optional(price)
+    }
 ));
 
 var asset_options = (exports.asset_options = new Serializer("asset_options", {
@@ -992,7 +994,9 @@ var asset_symbol_eq_lit_predicate = (exports.asset_symbol_eq_lit_predicate = new
 
 var block_id_predicate = (exports.block_id_predicate = new Serializer(
     "block_id_predicate",
-    {id: bytes(20)}
+    {
+        id: bytes(20)
+    }
 ));
 
 var predicate = static_variant([

@@ -532,7 +532,7 @@ export var price = new Serializer("price", {
 });
 
 export var extended_asset_options = new Serializer("extensions_type", {
-    payment_core_exchange_rate: price
+    payment_core_exchange_rate: optional(price)
 });
 
 export var asset_options = new Serializer("asset_options", {
