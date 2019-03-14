@@ -1142,6 +1142,119 @@ Types.address = {
     }
 };
 
+Types.extension = function(fields_def) {
+    // fields_def is an array
+    _SerializerValidation2.default.require_array(fields_def, function(r) {
+        _SerializerValidation2.default.string(r.name);
+        _SerializerValidation2.default.required(r.type, "st_operation");
+    });
+    //v.required(st_operation, "st_operation");
+    return {
+        fromByteBuffer: function fromByteBuffer(b) {
+            var count = b.readVarint32();
+            if (count === 0) {
+                return undefined;
+            }
+            var o = {};
+            if (count > fields_def.length) {
+                throw new Error("two many fields");
+            }
+            while (count > 0) {
+                var index = b.readVarint32();
+                if (index >= fields_def.length) {
+                    throw new Error("index out of range");
+                }
+                var operation = fields_def[index];
+                o[operation.name] = operation.type.fromByteBuffer(b);
+                count--;
+            }
+            return o;
+            // return st_operation.fromByteBuffer(b);
+        },
+        appendByteBuffer: function appendByteBuffer(b, object) {
+            //let tempBuffer = new Buffer([]);
+            var tempBuffer = new ByteBuffer(
+                ByteBuffer.DEFAULT_CAPACITY,
+                ByteBuffer.LITTLE_ENDIAN
+            );
+            var count = 0;
+            if (object) {
+                fields_def.forEach(function(f, i) {
+                    if (
+                        object[f.name] !== undefined &&
+                        object[f.name] !== null
+                    ) {
+                        tempBuffer.writeVarint32(i);
+                        f.type.appendByteBuffer(tempBuffer, object[f.name]);
+                        count++;
+                    }
+                });
+            }
+            b.writeVarint32(count);
+            tempBuffer.flip();
+            b.append(tempBuffer);
+
+            return;
+        },
+        fromObject: function fromObject(object) {
+            if (object === undefined) {
+                return undefined;
+            }
+            /*
+            return st_operation.fromObject(object);
+            */
+            var result = {};
+            fields_def.forEach(function(f) {
+                if (object[f.name] !== undefined && object[f.name] !== null) {
+                    result[f.name] = f.type.fromObject(object[f.name]);
+                }
+            });
+            return result;
+        },
+        toObject: function toObject(object) {
+            var debug =
+                arguments.length > 1 && arguments[1] !== undefined
+                    ? arguments[1]
+                    : {};
+
+            // toObject is only null save if use_default is true
+            var result_object = (function() {
+                if (object === undefined) {
+                    return undefined;
+                } else {
+                    // return st_operation.toObject(object, debug);
+                    var result = {};
+                    fields_def.forEach(function(f) {
+                        if (
+                            object[f.name] !== undefined &&
+                            object[f.name] !== null
+                        ) {
+                            result[f.name] = f.type.toObject(
+                                object[f.name],
+                                debug
+                            );
+                        }
+                    });
+                    return result;
+                }
+            })();
+
+            if (debug.annotate) {
+                if (
+                    (typeof result_object === "undefined"
+                        ? "undefined"
+                        : _typeof(result_object)) === "object"
+                ) {
+                    result_object.__optional = "parent is optional";
+                } else {
+                    result_object = {__optional: result_object};
+                }
+            }
+            return result_object;
+        }
+    };
+};
+
 var strCmp = function strCmp(a, b) {
     return a > b ? 1 : a < b ? -1 : 0;
 };

@@ -21,7 +21,8 @@ var uint8 = types.uint8,
     public_key = types.public_key,
     address = types.address,
     time_point_sec = types.time_point_sec,
-    optional = types.optional;
+    optional = types.optional,
+    extension = types.extension;
 
 future_extensions = types.void;
 
@@ -531,10 +532,6 @@ export var price = new Serializer("price", {
     quote: asset
 });
 
-export var extended_asset_options = new Serializer("extensions_type", {
-    payment_core_exchange_rate: optional(price)
-});
-
 export var asset_options = new Serializer("asset_options", {
     max_supply: int64,
     market_fee_percent: uint16,
@@ -547,7 +544,12 @@ export var asset_options = new Serializer("asset_options", {
     whitelist_markets: set(protocol_id_type("asset")),
     blacklist_markets: set(protocol_id_type("asset")),
     description: string,
-    extensions: extended_asset_options
+    extensions: extension([
+        {
+            name: "payment_core_exchange_rate",
+            type: optional(price)
+        }
+    ])
 });
 
 export var bitasset_options = new Serializer("bitasset_options", {
