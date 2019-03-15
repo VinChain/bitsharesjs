@@ -596,7 +596,7 @@ var asset_options = (exports.asset_options = new Serializer("asset_options", {
     extensions: extension([
         {
             name: "payment_core_exchange_rate",
-            type: optional(price)
+            type: price
         }
     ])
 }));
