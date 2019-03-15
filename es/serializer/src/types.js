@@ -22,6 +22,7 @@ import ObjectId from "../../chain/src/ObjectId";
 
 import {PublicKey, Address} from "../../ecc";
 import {ChainConfig} from "bitsharesjs-ws";
+import ByteBuffer from "bytebuffer";
 
 var Types = {};
 

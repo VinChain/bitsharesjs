@@ -36,6 +36,10 @@ var _ecc = require("../../ecc");
 
 var _bitsharesjsWs = require("bitsharesjs-ws");
 
+var _bytebuffer = require("bytebuffer");
+
+var _bytebuffer2 = _interopRequireDefault(_bytebuffer);
+
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {default: obj};
 }
@@ -1173,9 +1177,9 @@ Types.extension = function(fields_def) {
         },
         appendByteBuffer: function appendByteBuffer(b, object) {
             //let tempBuffer = new Buffer([]);
-            var tempBuffer = new ByteBuffer(
-                ByteBuffer.DEFAULT_CAPACITY,
-                ByteBuffer.LITTLE_ENDIAN
+            var tempBuffer = new _bytebuffer2.default(
+                _bytebuffer2.default.DEFAULT_CAPACITY,
+                _bytebuffer2.default.LITTLE_ENDIAN
             );
             var count = 0;
             if (object) {
