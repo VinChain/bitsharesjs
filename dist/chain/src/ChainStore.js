@@ -1405,6 +1405,24 @@ var ChainStore = (function() {
         return pending_request.promise;
     };
 
+    /**
+     *
+     * @return a promise with the workers array
+     */
+
+    ChainStore.prototype.fetchAccountPermissions = function fetchAccountPermissions(
+        name_or_id
+    ) {
+        return new Promise(function(resolve, reject) {
+            _bitsharesjsWs.Apis.instance()
+                .db_api()
+                .exec("list_account_permissions", [name_or_id])
+                .then(function(permissions_array) {
+                    resolve(permissions_array);
+                }, reject);
+        });
+    };
+
     //_notifyAccountSubscribers( account_id )
     //{
     //   let sub = this.subscriptions_by_account.get( account_id )
