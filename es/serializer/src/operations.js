@@ -21,7 +21,8 @@ var uint8 = types.uint8,
     public_key = types.public_key,
     address = types.address,
     time_point_sec = types.time_point_sec,
-    optional = types.optional;
+    optional = types.optional,
+    extension = types.extension;
 
 future_extensions = types.void;
 
@@ -543,7 +544,12 @@ export var asset_options = new Serializer("asset_options", {
     whitelist_markets: set(protocol_id_type("asset")),
     blacklist_markets: set(protocol_id_type("asset")),
     description: string,
-    extensions: set(future_extensions)
+    extensions: extension([
+        {
+            name: "payment_core_exchange_rate",
+            type: price
+        }
+    ])
 });
 
 export var bitasset_options = new Serializer("bitasset_options", {

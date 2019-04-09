@@ -36,7 +36,8 @@ var uint8 = _types2.default.uint8,
     public_key = _types2.default.public_key,
     address = _types2.default.address,
     time_point_sec = _types2.default.time_point_sec,
-    optional = _types2.default.optional;
+    optional = _types2.default.optional,
+    extension = _types2.default.extension;
 
 future_extensions = _types2.default.void;
 
@@ -592,7 +593,12 @@ var asset_options = (exports.asset_options = new Serializer("asset_options", {
     whitelist_markets: set(protocol_id_type("asset")),
     blacklist_markets: set(protocol_id_type("asset")),
     description: string,
-    extensions: set(future_extensions)
+    extensions: extension([
+        {
+            name: "payment_core_exchange_rate",
+            type: price
+        }
+    ])
 }));
 
 var bitasset_options = (exports.bitasset_options = new Serializer(
@@ -987,7 +993,9 @@ var asset_symbol_eq_lit_predicate = (exports.asset_symbol_eq_lit_predicate = new
 
 var block_id_predicate = (exports.block_id_predicate = new Serializer(
     "block_id_predicate",
-    {id: bytes(20)}
+    {
+        id: bytes(20)
+    }
 ));
 
 var predicate = static_variant([
